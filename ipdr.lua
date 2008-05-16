@@ -1,5 +1,3 @@
--- ipdr_proto = Proto("ipdr", "IPDR")
-
 local message_types = {
    [0x01] = "FLOW START",
    [0x03] = "FLOW STOP",
@@ -26,7 +24,9 @@ local message_types = {
    [0x40] = "KEEP ALIVE",
 }
 
-function ipdr_proto.dissector (buffer, pinfo, tree)
+
+
+function ipdr_proto_dissector (buffer, pinfo, tree)
    tree = tree:add(ipdr_proto, buffer(), "IPDR")
    
    tree:add_le(buffer(0,1), "Version: "..buffer(0,1):uint())
@@ -51,6 +51,18 @@ function ipdr_proto.dissector (buffer, pinfo, tree)
    return messagelen
 end
 
-local tcp_table = DissectorTable.get("tcp.port")
-tcp_table:add(4737, ipdr_proto)
+-- This is a work around so that reloading this file with dofile()
+-- works correctly.  If it's not done this way, then wireshark 1.0.0
+-- crashes on reloading the file.
+if ipdr_proto == nil then
+   ipdr_proto = Proto("ipdr", "IPDR")
+   ipdr_proto["dissector"] = function(buffer, pinfo, tree) 
+                                return ipdr_proto_dissector(buffer,
+                                                            pinfo, 
+                                                            tree)
+                             end
+   local tcp_table = DissectorTable.get("tcp.port")
+   tcp_table:add(4737, ipdr_proto)
+end
+
 
