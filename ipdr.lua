@@ -1,9 +1,29 @@
 -- ipdr_proto = Proto("ipdr", "IPDR")
 
 local message_types = {
+   [0x01] = "FLOW START",
+   [0x03] = "FLOW STOP",
    [0x05] = "CONNECT",
    [0x06] = "CONNECT RESPONSE",
    [0x07] = "DISCONNECT",
+   [0x08] = "SESSION START",
+   [0x09] = "SESSION STOP",
+   [0x10] = "TEMPLATE DATA",
+   [0x13] = "FINAL TEMPLATE DATA ACK",
+   [0x14] = "GET SESSIONS",
+   [0x15] = "GET SESSIONS RESPONSE",
+   [0x16] = "GET TEMPLATES",
+   [0x17] = "GET TEMPLATES RESPONSE",
+   [0x1a] = "MODIFY TEMPLATE",
+   [0x1b] = "MODIFY TEMPLATE RESPONSE",
+   [0x1d] = "START NEGOTIATION",
+   [0x1e] = "START NEGOTIATION REJECT",
+   [0x20] = "DATA",
+   [0x21] = "DATA ACKNOWLEDGE",
+   [0x23] = "ERROR",
+   [0x30] = "REQUEST",
+   [0x31] = "RESPONSE",
+   [0x40] = "KEEP ALIVE",
 }
 
 function ipdr_proto.dissector (buffer, pinfo, tree)
