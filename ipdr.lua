@@ -1,16 +1,13 @@
 -- ipdr_proto = Proto("ipdr", "IPDR")
 
-local message_types = {}
-message_types[5] = "CONNECT"
-message_types[6] = "CONNECT RESPONSE"
-message_types[7] = "DISCONNECT"
+local message_types = {
+   [0x05] = "CONNECT",
+   [0x06] = "CONNECT RESPONSE",
+   [0x07] = "DISCONNECT",
+}
 
 function ipdr_proto.dissector (buffer, pinfo, tree)
    tree = tree:add(ipdr_proto, buffer(), "IPDR")
-   
-   -- local header = mactoip_tree:add_le(buffer(0,16), "Authentication Header")
-   -- local version = buffer(16,1):le_uint()
-   -- mactoip_tree:add_le(buffer(16,1), "Version ("..version..")")
    
    tree:add_le(buffer(0,1), "Version: "..buffer(0,1):uint())
    
